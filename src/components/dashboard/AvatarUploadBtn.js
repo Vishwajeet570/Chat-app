@@ -4,6 +4,7 @@ import AvatarEditor from 'react-avatar-editor';
 import { useModalState } from '../../misc/custom-hooks';
 import { database, storage } from '../../misc/firebase';
 import { useProfile } from '../../context/profile.context';
+import ProfileAvatar from '../ProfileAvatar';
 
 const fileInputTypes = '.png, .jpg, .jpeg';
 const acceptedFileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
@@ -44,14 +45,14 @@ const AvatarUploadBtn = () => {
     try {
       const blob = await getBlob(canvas);
       const avatarFileRef = storage
-        .ref(`profile/${profile.uid}`)
+        .ref(`profiles/${profile.uid}`)
         .child('avatar');
       const uploadAvatarResult = await avatarFileRef.put(blob, {
         cacheControl: `public,max-age=${3600 * 24 * 3}`,
       });
       const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
       const userAvatarRef = database
-        .ref(`profile/${profile.uid}`)
+        .ref(`profiles/${profile.uid}`)
         .child('avatar');
       userAvatarRef.set(downloadUrl);
       setIsLoading(false);
@@ -63,6 +64,11 @@ const AvatarUploadBtn = () => {
   };
   return (
     <div className="mt-3 text-center">
+      <ProfileAvatar
+        src={profile.avatar}
+        name={profile.name}
+        className="width-200 height-200 img-fullsize font-huge"
+      />
       <div>
         <label
           htmlFor="avatar-upload"
