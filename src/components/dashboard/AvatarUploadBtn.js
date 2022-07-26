@@ -46,7 +46,7 @@ const AvatarUploadBtn = () => {
     try {
       const blob = await getBlob(canvas);
       const avatarFileRef = storage
-        .ref(`profiles/${profile.uid}`)
+        .ref(`profile/${profile.uid}`)
         .child('avatar');
       const uploadAvatarResult = await avatarFileRef.put(blob, {
         cacheControl: `public,max-age=${3600 * 24 * 3}`,
